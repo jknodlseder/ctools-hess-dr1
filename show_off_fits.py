@@ -310,12 +310,12 @@ def plot_results(results, fontsize=12, show_source_obs=False):
 
     # Plot data
     ax.errorbar(zenith, detxy, yerr=e_detxy, fmt='ro', capsize=0, linewidth=1,
-                zorder=3, label=r'$\sqrt{\nabla_\mathrm{x}^2+\nabla_\mathrm{y}^2}$')
+                zorder=3, label=r'$\sqrt{G_\mathrm{x}^2+G_\mathrm{y}^2}$')
     if not show_source_obs:
         ax.errorbar(zenith, detx, yerr=e_detx, color='gray', fmt='o', capsize=0, linewidth=1,
-                    zorder=2, label=r'$|\nabla_\mathrm{x}|$')
+                    zorder=2, label=r'$|G_\mathrm{x}|$')
         ax.errorbar(zenith, dety, yerr=e_dety, color='silver', fmt='o', capsize=0, linewidth=1,
-                    zorder=1, label=r'$|\nabla_\mathrm{y}|$')
+                    zorder=1, label=r'$|G_\mathrm{y}|$')
 
     # Plot source data
     if show_source_obs:
