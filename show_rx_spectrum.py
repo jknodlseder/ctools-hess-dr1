@@ -124,10 +124,50 @@ def rx_sed_2018():
     return engs, flux, e_flux
 
 
+# ===================================================== #
+# Return RX J1713 Fermi-LAT data (Abdalla et al. (2018) #
+# ===================================================== #
+def rx_fermi_sed_2018():
+    """
+    Return Fermi-LAT SED data of Abdalla et al. (2018)
+    """
+    # Set data
+    engs     = [1.34857e9,  2.32809e9,  4.14737e9,  7.28459e9,  1.29641e10,
+                2.28521e10, 4.09372e10, 7.10257e10, 1.26150e11, 2.29923e11]
+    engs_min = [1.01988e9,  1.75639e9,  3.19622e9,  5.55414e9,  9.96531e9,
+                1.75911e10, 3.13063e10, 5.49248e10, 9.57443e10, 1.68746e11]
+    engs_max = [1.74888e9,  3.15179e9,  5.50281e9,  9.94825e9,  1.74261e10,
+                3.13153e10, 5.34620e10, 9.64993e10, 1.73066e11, 3.04544e11]
+    flux     = [4.88991e-12, 7.16460e-12, 7.86687e-12, 1.14646e-11, 1.20316e-11,
+                2.06851e-11, 2.31630e-11, 1.43021e-11, 2.35204e-11, 2.68885e-11]
+    flux_min = [2.78015e-12, 5.54979e-12, 5.84541e-12, 8.55457e-12, 9.29587e-12,
+                1.70968e-11, 1.85328e-11, 8.62990e-12, 1.44906e-11, 1.40815e-11]
+    flux_max = [6.86216e-12, 9.02501e-12, 9.80708e-12, 1.35915e-11, 1.44297e-11,
+                2.46750e-11, 2.82448e-11, 1.97633e-11, 3.01483e-11, 3.71124e-11]
+
+    # Initialise error lists
+    e_engs_neg = []
+    e_engs_pos = []
+    e_flux_neg = []
+    e_flux_pos = []
+
+    # Convert per TeV in per ergs
+    for i, _ in enumerate(flux):
+        e_engs_neg.append((engs[i] - engs_min[i])/1.0e12)
+        e_engs_pos.append((engs_max[i] - engs[i])/1.0e12)
+        e_flux_neg.append(flux[i] - flux_min[i])
+        e_flux_pos.append(flux_max[i] - flux[i])
+        engs[i] = engs[i]/1.0e12
+        flux[i] = flux[i]
+
+    # Return data
+    return engs, flux, [e_engs_neg, e_engs_pos], [e_flux_neg, e_flux_pos]
+
+
 # =========================== #
 # Plot spectrum and butterfly #
 # =========================== #
-def plot_spectrum(specfile, butterfile, ax, fmt='ro'):
+def plot_spectrum(specfile, butterfile, ax, fmt='ro', fermi=False):
     """
     Plot sensitivity data
 
@@ -236,8 +276,16 @@ def plot_spectrum(specfile, butterfile, ax, fmt='ro'):
     engs, ergs, yerrs = rx_sed_2018()
     ax.errorbar(engs, ergs, yerr=yerrs, fmt='bo', label='H.E.S.S. collaboration et al. (2018)')
 
+    # Plot RX J1713 Fermi-LAT SED
+    if fermi:
+        engs, ergs, xerrs, yerrs = rx_fermi_sed_2018()
+        ax.errorbar(engs, ergs, xerr=xerrs, yerr=yerrs, fmt='go', label='Fermi-LAT')
+
 	# Plot spectral law from publication
-    abdalla_x = [i*0.1+0.2 for i in range(400)]
+    if fermi:
+        abdalla_x = [i*0.001+0.001 for i in range(40000)]
+    else:
+        abdalla_x = [i*0.1+0.2 for i in range(400)]
     abdalla_y = []
     for x in abdalla_x:
         y = 2.3e-11 * math.pow(x, -2.06) * math.exp(-x/12.9)
@@ -258,7 +306,7 @@ def plot_spectrum(specfile, butterfile, ax, fmt='ro'):
 # ============= #
 # Show spectrum #
 # ============= #
-def show_spectrum():
+def show_spectrum(fermi=False):
     """
     Show spectrum
     """
@@ -270,7 +318,10 @@ def show_spectrum():
     ax.set_yscale('log')
     ax.set_xlabel('Energy (TeV)', fontsize=14)
     ax.set_ylabel(r'E$^2$ $\times$ dN/dE (erg cm$^{-2}$ s$^{-1}$)', fontsize=14)
-    ax.set_xlim([0.3,40.0])
+    if fermi:
+        ax.set_xlim([0.001,40.0])
+    else:
+        ax.set_xlim([0.3,40.0])
     ax.set_ylim([1e-12,1e-10])
     for tick in ax.xaxis.get_major_ticks():
         tick.label.set_fontsize(14)
@@ -293,7 +344,7 @@ def show_spectrum():
     plotfile = options[0]['value']
 
     # Show spectrum
-    plot_spectrum(args[0], args[1], ax, fmt='ro')
+    plot_spectrum(args[0], args[1], ax, fmt='ro', fermi=fermi)
 
     # Show and save figure
     plt.show()
@@ -309,4 +360,5 @@ def show_spectrum():
 if __name__ == '__main__':
 
     # Show spectrum
-    show_spectrum()
+    show_spectrum(fermi=False)
+    #show_spectrum(fermi=True)

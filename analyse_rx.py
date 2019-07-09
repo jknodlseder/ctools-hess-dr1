@@ -852,9 +852,8 @@ def generate_skymap(emin=0.3, emax=50.0):
         skymap['roiradius']   = 0.01
         skymap['inradius']    = 0.8
         skymap['outradius']   = 1.0
-        skymap['iterations']  = 3
-        skymap['threshold']   = 3.0
-        skymap['inexclusion'] = 'NONE'
+        skymap['iterations']  = 0
+        skymap['inexclusion'] = 'rx_srcreg_map.fits'
         skymap['outmap']      = outmap
         skymap['logfile']     = logfile
         skymap.logFileOpen()

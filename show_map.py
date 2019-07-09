@@ -27,6 +27,43 @@ import cscripts
 import matplotlib.pyplot as plt
 
 
+# =========== #
+# Plot circle #
+# =========== #
+def plot_circle(ra, dec, rad, color='w', fmt='-', linewidth=1):
+    """
+    Plot circle
+
+    Parameters
+    ----------
+    ra : float
+        Right Ascension (deg)
+    dec : float
+        Declination (deg)
+    rad : float
+        Radius (deg)
+    color : str, optional
+        Color string
+    fmt : str, optional
+        Format string
+    linewidth : int, optional
+        Line width
+    """
+    # Set radius size in longitude and latitude
+    dx = rad/math.cos(dec*gammalib.deg2rad)
+    dy = rad
+
+    # Create arrays
+    x = [ra +dx*math.sin(angle*gammalib.deg2rad) for angle in range(360)]
+    y = [dec+dy*math.cos(angle*gammalib.deg2rad) for angle in range(360)]
+
+    # Plot circle
+    plt.plot(x, y, fmt, color=color, linewidth=linewidth)
+
+    # Return
+    return
+
+
 # ======== #
 # Plot map #
 # ======== #
@@ -145,6 +182,11 @@ def plot_all(cntcube, modcube, smooth=0.02):
 
     # Plot map
     plot_map(resmap, ax, smooth=smooth)
+
+    # Plot circles
+    #plot_circle(258.1125, -39.6867, 0.6, color='w', fmt='-', linewidth=1)
+    #plot_circle(258.1125, -39.6867, 0.8, color='w', fmt='--', linewidth=1)
+    #plot_circle(258.1125, -39.6867, 1.0, color='w', fmt='--', linewidth=1)
 
     # Show map
     plt.show()
