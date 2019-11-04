@@ -227,7 +227,7 @@ ax1.grid()
 plot_butterfly('butterfly_unbinned.txt',ax1,'C1','ctools: joint Fermi LAT + H.E.S.S. (unbinned)')
 plot_spectrum('spectrum_unbinned.fits',ax1,'C1')
 
-plot_butterfly('butterfly_wstat.txt',ax1,'C0','ctools: joint Fermi LAT + H.E.S.S. (On/Off WSTAT)')
+plot_butterfly('butterfly_wstat.txt',ax1,'C0','ctools: joint Fermi LAT + H.E.S.S. (On-Off wstat)')
 plot_spectrum('spectrum_wstat.fits',ax1,'C0')
 
 ax1.legend()

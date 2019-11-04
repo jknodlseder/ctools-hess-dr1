@@ -109,7 +109,7 @@ def get_hess_lightcurve2(filename='pks-hess-data2.csv'):
 # =============== #
 # Plot lightcurve #
 # =============== #
-def plot_lightcurve(filename, label='ctools (On/Off - wstat)'):
+def plot_lightcurve(filename, label='ctools (On-Off - wstat)'):
     """
     Plot lightcurve
 
@@ -252,4 +252,4 @@ if __name__ == '__main__':
 
     # Plot OnOff lightcurve
     plot_lightcurve('pks_lightcrv_ptsrc_fplaw700_lookup_grad_hess_edisp_ONOFF_10bins.fits',
-                     label='On/Off - wstat')
+                     label='On-Off - wstat')
